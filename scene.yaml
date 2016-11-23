@@ -1,0 +1,68 @@
+import: 
+    - https://tangrams.github.io/blocks/lines/dots-glow.yaml
+
+cameras:
+    camera1:
+        type: perspective
+
+lights:
+    light1:
+        type: directional
+        direction: [0, 1, -.5]
+        diffuse: .3
+        ambient: 1
+
+sources:
+    mapzen:
+        mapzen:
+        type: TopoJSON
+        url: https://tile.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.topojson?api_key=mapzen-D8mmijp
+    ne_rivers:
+        type: GeoJSON
+        url: https://gist.githubusercontent.com/sensescape/36c66eef099c2e28f0562e822d1de128/raw/2cad2ab7271822aecefd238a8851951ae611cc43/rivers.geojson
+
+layers:
+    earth:
+        data: { source: mapzen }
+        draw:
+            polygons:
+                order: 0
+                color: [[1,[0.824,0.745,0.639,1.0]],[6,[0.824,0.745,0.639,1.0]],[10,[vec4(0.086,0.137,0.255,1.0]]]
+
+    water:
+        data: { source: mapzen, layer: water }
+        draw:
+            polygons:
+                order: 1
+                color: [0.112,0.174,0.330,1.0]
+
+        # river:
+        #     filter: { kind: [river,canal,stream,dam,ditch,drain], $zoom: { min: 9 } }
+        #     draw:
+        #         lines:
+        #             order: 2
+        #             style: runway-dots
+        #             color: [[9,[0.112,0.174,0.330,1.0]],[15,[0.112,0.174,0.330,1.0]]]
+        #             width: [[9,10px],[15,60px]]
+    ne_rivers:
+        data: { source: ne_rivers}
+        #filter: function() { return scalerank <= $zoom;}
+        filter: { $zoom: { max: 9 } }
+        draw:
+            lines:
+                color: [[1,[0.376,0.365,0.212,1.0]],[6,[0.112,0.174,0.330,1.0]]]
+                width: [[3,0.25px],[9,6px]]
+                order: 10000
+
+styles:
+    runway-dots:
+        base: lines
+        mix: [lines-dots-glow]
+        shaders:
+            defines:
+                DOTS_ANIMATE: color.a *=abs(sin(v_texcoord.y+u_time))*.9
+            blocks:
+                filter: |
+                    #ifdef DOTS_ANIMATE
+                    DOTS_ANIMATE;
+                    #endif
