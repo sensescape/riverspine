@@ -1,16 +1,19 @@
 import: 
     - https://tangrams.github.io/blocks/lines/dots-glow.yaml
+    - https://tangrams.github.io/blocks/lines/glow.yaml
+    - https://tangrams.github.io/blocks/elevation/stripes.yaml
+    - https://tangrams.github.io/blocks/lines/dots.yaml
 
 cameras:
     camera1:
         type: perspective
 
-lights:
-    light1:
-        type: directional
-        direction: [0, 1, -.5]
-        diffuse: .3
-        ambient: 1
+# lights:
+#     light1:
+#         type: directional
+#         direction: [0, 1, -.5]
+#         diffuse: .2
+#         ambient: 1
 
 sources:
     mapzen:
@@ -21,41 +24,84 @@ sources:
         type: GeoJSON
         url: https://gist.githubusercontent.com/sensescape/36c66eef099c2e28f0562e822d1de128/raw/2cad2ab7271822aecefd238a8851951ae611cc43/rivers.geojson
 
+scene:
+    background:
+        color: [0.112,0.174,0.330,1.0]
 layers:
     earth:
         data: { source: mapzen }
         draw:
             polygons:
+                style: gradient1
                 order: 0
-                color: [[1,[0.824,0.745,0.639,1.0]],[6,[0.824,0.745,0.639,1.0]],[10,[vec4(0.086,0.137,0.255,1.0]]]
+                color: [0.226,0.323,0.480,1.0]
 
     water:
         data: { source: mapzen, layer: water }
         draw:
             polygons:
                 order: 1
-                color: [0.112,0.174,0.330,1.0]
+                color: [0.035,0.092,0.184,1.0]
 
-        # river:
-        #     filter: { kind: [river,canal,stream,dam,ditch,drain], $zoom: { min: 9 } }
-        #     draw:
-        #         lines:
-        #             order: 2
-        #             style: runway-dots
-        #             color: [[9,[0.112,0.174,0.330,1.0]],[15,[0.112,0.174,0.330,1.0]]]
-        #             width: [[9,10px],[15,60px]]
+        river:
+            filter: { kind: [river,canal,stream,dam,ditch,drain], $zoom: { min: 9 } }
+            draw:
+                lines:
+                    order: 2
+                    color: [0.282,0.212,0.961,0.35]
+                    width: [[9,0px],[12,7px]]
+                lines2:
+                    order: 4
+                    color: [0.035,0.092,0.184,1.0]
+                    width: [[9,0px],[12,4px]]
+                lines3:
+                    order: 6
+                    style: river-glow
+                    color: [0.180,0.082,1.000,1.0]
+                    width: [[10,5px],[14,40px]]
+                lines5:
+                    order: 8
+                    style: river-dots-glow
+                    color: [0.000,0.871,1.000,1.0]
+                    width: [[9,0px],[12,6px]]
+
+
     ne_rivers:
-        data: { source: ne_rivers}
-        #filter: function() { return scalerank <= $zoom;}
-        filter: { $zoom: { max: 9 } }
+        data: { source: ne_rivers }
+        filter: { $zoom: { max: 16 } }
         draw:
             lines:
-                color: [[1,[0.376,0.365,0.212,1.0]],[6,[0.112,0.174,0.330,1.0]]]
-                width: [[3,0.25px],[9,6px]]
+                color: [0.282,0.212,0.961,0.35]
+                width: [[4,1px],[8,14px]]
                 order: 10000
+            lines2:
+                color: [0.035,0.092,0.184,1.0]
+                width: [[4,1px],[8,9px]]
+                order: 10002
+            # lines3:
+            #     style: river-dashed
+            #     color: [0.180,0.082,1.000,1.0]
+            #     width: 3px
+            #     order: 10002
+            lines4:
+                style: river-glow
+                color: [0.180,0.082,1.000,1.0]
+                width: [[3,5px],[8,50px]]
+                order: 10004
+                join: round
+            # lines4:
+            #     style: river-glow
+            #     color: [0.000,0.871,1.000,1.0]
+            #     width: [[5,1px],[8,4px]]
+            #     order: 10006
+            lines6:
+                style: river-dots-glow
+                color: [0.000,0.871,1.000,1.0]
+                width: [[4,3px],[8,16px]]
+                order: 10008
 
 styles:
-    runway-dots:
+    river-dots-glow:
         base: lines
         mix: [lines-dots-glow]
         shaders:
@@ -66,3 +112,38 @@ styles:
                     #ifdef DOTS_ANIMATE
                     DOTS_ANIMATE;
                     #endif
+    lines2:
+        base: lines
+
+    river-glow:
+        base: lines
+        mix: [lines-glow]
+        shaders:
+            defines:
+                GLOW_WIDTH: 0.95
+                GLOW_BRIGHTNESS: .15
+
+    dots:
+        base: lines
+        mix: [lines-dots]
+        shaders:
+            defines:
+                DOTS_SIZE: 0.15
+
+    river-dashed:
+        base: lines
+        dash: [3,6]
+        dash_background_color: [0.035,0.092,0.184]
+        shaders:
+            blocks:
+                position: |
+                    v_texcoord.y *= 25.;
+
+
+    gradient1:
+        base: polygons
+        shaders:
+            blocks:
+                filter: |
+                    // mix white and green with X coordinate
+                    color.rgb = mix(vec3(0.226,0.323,0.480), vec3(0.063,0.167,0.333), gl_FragCoord.x / u_resolution.x + gl_FragCoord.y / u_resolution.y);
