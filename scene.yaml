@@ -26,7 +26,7 @@ sources:
 
 scene:
     background:
-        color: [0.112,0.174,0.330,1.0]
+        color: [0.266,0.578,0.765,1.0]
 layers:
     earth:
         data: { source: mapzen }
@@ -40,64 +40,56 @@ layers:
         data: { source: mapzen, layer: water }
         draw:
             polygons:
-                order: 1
-                color: [0.035,0.092,0.184,1.0]
+                order: 10010
+                color: [0.266,0.578,0.765,1.0]
 
         river:
-            filter: { kind: [river,canal,stream,dam,ditch,drain], $zoom: { min: 9 } }
+            filter: { kind: [river,canal,stream,dam,ditch,drain], $zoom: { min: 7 } }
             draw:
                 lines:
                     order: 2
-                    color: [0.282,0.212,0.961,0.35]
-                    width: [[9,0px],[12,7px]]
+                    color: [0.690,0.149,0.000,1.0]
+                    width: [[9,0px],[11,6px],[13,0px]]
                 lines2:
                     order: 4
-                    color: [0.035,0.092,0.184,1.0]
-                    width: [[9,0px],[12,4px]]
+                    color: [0.266,0.578,0.765,1.0]
+                    width: [[9,0px],[15,10px]]
                 lines3:
                     order: 6
                     style: river-glow
-                    color: [0.180,0.082,1.000,1.0]
+                    color: [0.30,0.30,0.00,1.00]
                     width: [[10,5px],[14,40px]]
                 lines5:
                     order: 8
                     style: river-dots-glow
-                    color: [0.000,0.871,1.000,1.0]
+                    color: [0.00,0.35,0.00,1.0]
                     width: [[9,0px],[12,6px]]
 
 
     ne_rivers:
         data: { source: ne_rivers }
-        filter: { $zoom: { max: 16 } }
+        filter: { $zoom: { max: 14 } }
         draw:
             lines:
-                color: [0.282,0.212,0.961,0.35]
-                width: [[4,1px],[8,14px]]
+                # color: [0.217,0.311,0.620,1.0]
+                color: [[1,[0.690,0.149,0.000,1.0]],[10,[0.690,0.149,0.000,1.0]]]
+                width: [[4,2px],[8,10px],[10,0px]]
                 order: 10000
             lines2:
-                color: [0.035,0.092,0.184,1.0]
-                width: [[4,1px],[8,9px]]
+                color: [0.266,0.578,0.765,1.0]
+                width: [[4,1px],[9,6px],[11,0px]]
                 order: 10002
-            # lines3:
-            #     style: river-dashed
-            #     color: [0.180,0.082,1.000,1.0]
-            #     width: 3px
-            #     order: 10002
             lines4:
                 style: river-glow
-                color: [0.180,0.082,1.000,1.0]
-                width: [[3,5px],[8,50px]]
+                color: [0.30,0.30,0.00,1.00]
+                width: [[3,1px],[5,5px],[10,50px],[12,0px]]
                 order: 10004
                 join: round
-            # lines4:
-            #     style: river-glow
-            #     color: [0.000,0.871,1.000,1.0]
-            #     width: [[5,1px],[8,4px]]
-            #     order: 10006
             lines6:
                 style: river-dots-glow
-                color: [0.000,0.871,1.000,1.0]
-                width: [[4,3px],[8,16px]]
+                # color: [[3,[0.00,0.35,0.00,1.0]],[7,[1.000,0.725,0.369,1.0]]]
+                color: [[1,[1.000,0.725,0.369,1.0]],[8,[1.000,0.725,0.369,1.0]],[11,[0.765,0.408,0.267,1.0]]]
+                width: [[4,0px],[10,20px],[12,0px]]
                 order: 10008
 
 styles:
@@ -146,4 +138,4 @@ styles:
             blocks:
                 filter: |
                     // mix white and green with X coordinate
-                    color.rgb = mix(vec3(0.226,0.323,0.480), vec3(0.063,0.167,0.333), gl_FragCoord.x / u_resolution.x + gl_FragCoord.y / u_resolution.y);
+                    color.rgb = mix(vec3(0.854,0.734,0.607), vec3(0.765,0.408,0.267), gl_FragCoord.x / u_resolution.x + gl_FragCoord.y / u_resolution.y);
