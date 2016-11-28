@@ -62,8 +62,8 @@ layers:
                 lines5:
                     order: 8
                     style: river-dots-glow
-                    color: [0.00,0.35,0.00,1.0]
-                    width: [[9,0px],[12,6px]]
+                    color: [[9,[1.000,0.725,0.369,1.0]],[10,[1.000,0.725,0.369,1.0]],[18,[0.765,0.408,0.267,1.0]]]
+                    width: [[9,0px],[12,9px]]
 
 
     ne_rivers:
@@ -98,7 +98,7 @@ styles:
         mix: [lines-dots-glow]
         shaders:
             defines:
-                DOTS_ANIMATE: color.a *=abs(sin(v_texcoord.y+u_time))*.9
+                DOTS_ANIMATE: color.a *=abs(sin(v_texcoord.y-u_time))*.9
             blocks:
                 filter: |
                     #ifdef DOTS_ANIMATE
