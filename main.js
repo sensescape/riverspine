@@ -14,7 +14,7 @@ function parseQuery (qstr) {
 map = (function () {
     'use strict';
 
-    var map_start_location = [30.0300, 31.2439, 11]; // Cairo
+    var map_start_location = [30.0300, 31.2439, 6]; // Cairo
 
     /*** URL parsing ***/
 
