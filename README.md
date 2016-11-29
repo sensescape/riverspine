@@ -2,7 +2,7 @@
 
 Live demo: https://sensescape.github.io/riverspine/
 
-![tangram-demo screenshot](https://cloud.githubusercontent.com/assets/459970/6629470/c007b1de-c8e4-11e4-854e-fd69f5135b3a.png)
+![tangram-demo screenshot](https://sensescape.github.io/riverspine/riverspine.png)
 
 ### To run locally:
 
